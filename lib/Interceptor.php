@@ -10,6 +10,9 @@ final class Interceptor
 {
     public static function handle(): void
     {
+        // Браузерный WebMCP-канал: свой путь, своя авторизация (сессия сайта)
+        WebmcpHandler::handle();
+
         if (!self::isMcpRequest()) return;
 
         // Загружаем модуль явно — OnProlog стреляет до Loader::includeModule в коде страницы

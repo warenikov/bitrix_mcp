@@ -38,6 +38,10 @@ class ToolTable extends DataManager
                 'values'        => ['N', 'Y'],
                 'default_value' => 'Y',
             ]),
+            new BooleanField('BROWSER_SAFE', [
+                'values'        => ['N', 'Y'],
+                'default_value' => 'N',
+            ]),
             new BooleanField('ACTIVE', [
                 'values'        => ['N', 'Y'],
                 'default_value' => 'Y',

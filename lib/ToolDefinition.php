@@ -14,6 +14,7 @@ final class ToolDefinition
         public readonly ToolType $type,
         public readonly array    $config,
         public readonly bool     $authRequired,
+        public readonly bool     $browserSafe,
         public readonly bool     $active,
         public readonly int      $sort,
     ) {}
@@ -28,6 +29,7 @@ final class ToolDefinition
             type:         ToolType::from($row['TYPE']),
             config:       is_string($row['CONFIG']) ? (json_decode($row['CONFIG'], true) ?? []) : [],
             authRequired: $row['AUTH_REQUIRED'] === 'Y',
+            browserSafe:  ($row['BROWSER_SAFE'] ?? 'N') === 'Y',
             active:       $row['ACTIVE'] === 'Y',
             sort:         (int)($row['SORT'] ?? 500),
         );

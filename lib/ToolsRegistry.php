@@ -67,6 +67,29 @@ final class ToolsRegistry
         };
     }
 
+    /**
+     * Инструменты для браузерного WebMCP-канала: только помеченные browser_safe,
+     * а из них требующие авторизации — лишь для залогиненного посетителя.
+     *
+     * @return ToolDefinition[]
+     */
+    public static function getForBrowser(?int $userId): array
+    {
+        return array_values(array_filter(
+            ToolRepository::getActive(),
+            static fn(ToolDefinition $def): bool =>
+                $def->browserSafe && (!$def->authRequired || ($userId !== null && $userId > 0))
+        ));
+    }
+
+    public static function findForBrowser(string $name, ?int $userId): ?ToolDefinition
+    {
+        $def = ToolRepository::findByName($name);
+        if ($def === null || !$def->active || !$def->browserSafe) return null;
+        if ($def->authRequired && ($userId === null || $userId <= 0)) return null;
+        return $def;
+    }
+
     private static function instantiateClass(ToolDefinition $def): ToolInterface
     {
         $class = $def->config['class'] ?? '';

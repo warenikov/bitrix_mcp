@@ -75,6 +75,8 @@ class alexw_clientsmcp extends CModule
             if ($filename === 'menu.php') continue;
             copy($src, $adminDir . '/' . $filename);
         }
+
+        CopyDirFiles(__DIR__ . '/js', $_SERVER['DOCUMENT_ROOT'] . '/bitrix/js/' . $this->MODULE_ID, true, true);
     }
 
     public function UnInstallFiles(): void
@@ -83,6 +85,7 @@ class alexw_clientsmcp extends CModule
         @unlink($_SERVER['DOCUMENT_ROOT'] . '/bitrix/admin/alexw_mcp_token_edit.php');
         @unlink($_SERVER['DOCUMENT_ROOT'] . '/bitrix/admin/alexw_mcp_tools.php');
         @unlink($_SERVER['DOCUMENT_ROOT'] . '/bitrix/admin/alexw_mcp_tool_edit.php');
+        DeleteDirFilesEx('/bitrix/js/' . $this->MODULE_ID . '/');
     }
 
     public function InstallEvents(): void
@@ -92,10 +95,20 @@ class alexw_clientsmcp extends CModule
             $this->MODULE_ID,
             '\Alexw\Clientsmcp\Interceptor', 'handle'
         );
+        EventManager::getInstance()->registerEventHandlerCompatible(
+            'main', 'OnPageStart',
+            $this->MODULE_ID,
+            '\Alexw\Clientsmcp\Handler\PageHandler', 'onPageStart'
+        );
     }
 
     public function UnInstallEvents(): void
     {
+        EventManager::getInstance()->unRegisterEventHandler(
+            'main', 'OnPageStart',
+            $this->MODULE_ID,
+            '\Alexw\Clientsmcp\Handler\PageHandler', 'onPageStart'
+        );
         EventManager::getInstance()->unRegisterEventHandler(
             'main', 'OnProlog',
             $this->MODULE_ID,

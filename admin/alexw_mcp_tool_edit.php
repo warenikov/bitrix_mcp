@@ -163,6 +163,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && check_bitrix_sessid()
         'DESCRIPTION'   => trim($_POST['DESCRIPTION'] ?? ''),
         'TYPE'          => $type,
         'AUTH_REQUIRED' => ($_POST['AUTH_REQUIRED'] ?? '') === 'Y' ? 'Y' : 'N',
+        'BROWSER_SAFE'  => ($_POST['BROWSER_SAFE'] ?? '') === 'Y' ? 'Y' : 'N',
         'ACTIVE'        => ($_POST['ACTIVE'] ?? '') === 'Y' ? 'Y' : 'N',
         'SORT'          => max(0, (int)($_POST['SORT'] ?? 500)),
         'CONFIG'        => json_encode($config, JSON_UNESCAPED_UNICODE),
@@ -196,6 +197,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['save_action'] ?? '') === '
     $arItem['TITLE']         = $_POST['TITLE']         ?? ($arItem['TITLE']         ?? '');
     $arItem['DESCRIPTION']   = $_POST['DESCRIPTION']   ?? ($arItem['DESCRIPTION']   ?? '');
     $arItem['AUTH_REQUIRED'] = $_POST['AUTH_REQUIRED'] ?? ($arItem['AUTH_REQUIRED'] ?? 'Y');
+    $arItem['BROWSER_SAFE']  = $_POST['BROWSER_SAFE']  ?? ($arItem['BROWSER_SAFE']  ?? 'N');
     $arItem['ACTIVE']        = $_POST['ACTIVE']        ?? ($arItem['ACTIVE']        ?? 'Y');
     $arItem['SORT']          = $_POST['SORT']          ?? ($arItem['SORT']          ?? 500);
 
@@ -511,6 +513,10 @@ document.addEventListener('DOMContentLoaded', function() {
 <tr>
     <td>Требует авторизации:</td>
     <td><input type="checkbox" name="AUTH_REQUIRED" value="Y"<?= checked_if(($arItem['AUTH_REQUIRED'] ?? 'Y') === 'Y') ?>></td>
+</tr>
+<tr>
+    <td>Доступен браузерным агентам (WebMCP):<br><small>Инструмент регистрируется на страницах сайта для AI-агентов браузера. Включайте только для read-only инструментов.</small></td>
+    <td><input type="checkbox" name="BROWSER_SAFE" value="Y"<?= checked_if(($arItem['BROWSER_SAFE'] ?? 'N') === 'Y') ?>></td>
 </tr>
 <tr>
     <td>Активен:</td>

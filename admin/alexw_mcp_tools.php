@@ -84,6 +84,7 @@ $oList->AddHeaders([
     ['id' => 'TITLE',         'content' => 'Название',      'sort' => 'TITLE', 'default' => true],
     ['id' => 'TYPE',          'content' => 'Тип',           'sort' => 'TYPE',  'default' => true],
     ['id' => 'AUTH_REQUIRED', 'content' => 'Авторизация',   'sort' => false,   'default' => true],
+    ['id' => 'BROWSER_SAFE',  'content' => 'WebMCP',        'sort' => false,   'default' => true],
     ['id' => 'ACTIVE',        'content' => 'Активен',       'sort' => 'ACTIVE','default' => true],
     ['id' => 'SORT',          'content' => 'Сорт.',         'sort' => 'SORT',  'default' => true],
 ]);
@@ -92,7 +93,7 @@ $typeLabels = ['builtin' => 'Встроенный', 'iblock' => 'Инфобло�
 
 $dbResult = ToolTable::getList([
     'order'  => [$oSort->getField() => $oSort->getOrder()],
-    'select' => ['ID', 'NAME', 'TITLE', 'TYPE', 'AUTH_REQUIRED', 'ACTIVE', 'SORT'],
+    'select' => ['ID', 'NAME', 'TITLE', 'TYPE', 'AUTH_REQUIRED', 'BROWSER_SAFE', 'ACTIVE', 'SORT'],
 ]);
 
 while ($row = $dbResult->fetch()) {
@@ -103,6 +104,7 @@ while ($row = $dbResult->fetch()) {
     $oRow->AddViewField('TITLE', htmlspecialcharsex($row['TITLE']));
     $oRow->AddViewField('TYPE', $typeLabels[$row['TYPE']] ?? $row['TYPE']);
     $oRow->AddViewField('AUTH_REQUIRED', $row['AUTH_REQUIRED'] === 'Y' ? 'Да' : 'Нет');
+    $oRow->AddViewField('BROWSER_SAFE', $row['BROWSER_SAFE'] === 'Y' ? 'Да' : 'Нет');
     $oRow->AddCheckField('ACTIVE');
     $oRow->AddViewField('SORT', $row['SORT']);
 
